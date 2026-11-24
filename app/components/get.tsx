@@ -34,10 +34,10 @@ export default function Get() {
 
   const cards = [
     {
-      title: "Cost Effective Solution",
+      title: "Cost-Effective Solution",
       description: "Get high-quality design work at a fraction of the cost.",
       icon: TrendingUp,
-      color: "text-purple-900",
+      color: "text-purple-400",
       bgColor: "bg-purple-900/10",
       graphData: [4, 6, 5, 7, 4, 8, 6, 9, 7, 8]
     },
@@ -45,7 +45,7 @@ export default function Get() {
       title: "Tailor-made Design",
       description: "We've got the expertise to make your vision a reality.",
       icon: Sparkles,
-      color: "text-purple-900",
+      color: "text-purple-400",
       bgColor: "bg-purple-900/10",
       isNew: true
     },
@@ -53,7 +53,7 @@ export default function Get() {
       title: "Scalable as You Grow",
       description: "We're ready to meet your evolving needs.",
       icon: Rocket,
-      color: "text-purple-900",
+      color: "text-purple-400",
       bgColor: "bg-purple-900/10"
     }
   ];
@@ -84,26 +84,18 @@ export default function Get() {
         y: sectionY,
       }}
     >
-      {/* Background Elements */}
-      <div className="absolute inset-0 overflow-hidden pointer-events-none">
-        {[...Array(3)].map((_, i) => (
-          <motion.div
+      {/* Background elements (CSS animation) */}
+      <div className="absolute inset-0 overflow-hidden pointer-events-none" aria-hidden="true">
+        {[0, 1, 2].map((i) => (
+          <div
             key={`orb-${i}`}
-            className="absolute rounded-full bg-purple-900/5 blur-3xl"
+            className="drift absolute rounded-full bg-purple-900/5 blur-3xl"
             style={{
               width: `${200 + i * 80}px`,
               height: `${200 + i * 80}px`,
               left: `${20 + i * 30}%`,
               top: `${30 + i * 20}%`,
-            }}
-            animate={{
-              x: [0, 50, -30, 0],
-              y: [0, -40, 20, 0],
-            }}
-            transition={{
-              duration: 15 + i * 4,
-              repeat: Infinity,
-              ease: "linear",
+              animationDuration: `${15 + i * 4}s`,
             }}
           />
         ))}
@@ -120,11 +112,11 @@ export default function Get() {
         >
           <div className="inline-block mb-3">
             <div className="bg-purple-900/10 rounded-full px-4 py-1 border border-purple-900/20">
-              <span className="text-purple-900 text-sm font-semibold">Why Choose Us</span>
+              <span className="text-purple-300 text-sm font-semibold">Why Choose Us</span>
             </div>
           </div>
           <h2 className="text-3xl md:text-4xl font-bold text-white mb-3">
-            Everything You Need to <span className="text-purple-900">Succeed</span>
+            Everything You Need to <span className="text-purple-400">Succeed</span>
           </h2>
           <p className="text-gray-300 text-base max-w-2xl mx-auto">
             Comprehensive solutions designed to help your business grow and thrive
@@ -167,11 +159,11 @@ export default function Get() {
 
                 {card.isNew && (
                   <div className="mb-4">
-                    <div className="inline-flex items-center gap-1.5 bg-purple-900/10 text-purple-900 text-xs px-3 py-1 rounded-full">
+                    <div className="inline-flex items-center gap-1.5 bg-purple-900/30 text-purple-300 text-xs px-3 py-1 rounded-full">
                       <div className="w-2 h-2 bg-purple-900 rounded-full animate-pulse" />
                       NEW
                     </div>
-                    <p className="text-xs text-gray-500 mt-1">Latest design</p>
+                    <p className="text-xs text-gray-400 mt-1">Latest design</p>
                   </div>
                 )}
 
@@ -244,31 +236,21 @@ export default function Get() {
                   ))}
                 </div>
 
-                <motion.div 
-                  className="bg-purple-900 text-black text-sm font-medium px-4 py-2 rounded-full flex items-center gap-2"
-                  animate={{
-                    scale: [1, 1.05, 1],
-                  }}
-                  transition={{
-                    duration: 2,
-                    repeat: Infinity,
-                    repeatDelay: 1,
-                  }}
-                >
+                <div className="bg-purple-600 text-white text-sm font-medium px-4 py-2 rounded-full flex items-center gap-2">
                   <Users className="w-4 h-4" />
                   <span>12 active now</span>
-                  <div className="w-2 h-2 bg-black rounded-full animate-pulse" />
-                </motion.div>
+                  <div className="w-2 h-2 bg-white rounded-full animate-pulse" />
+                </div>
               </div>
 
               {/* Collaboration stats */}
               <div className="mt-6 pt-4 border-t border-gray-100">
                 <div className="flex justify-between text-sm">
-                  <span className="text-gray-500">Messages sent</span>
+                  <span className="text-gray-400">Messages sent</span>
                   <span className="text-white font-semibold">2,847</span>
                 </div>
                 <div className="flex justify-between text-sm mt-2">
-                  <span className="text-gray-500">Files shared</span>
+                  <span className="text-gray-400">Files shared</span>
                   <span className="text-white font-semibold">156</span>
                 </div>
               </div>
@@ -293,7 +275,7 @@ export default function Get() {
               whileHover={{ scale: 1.05 }}
               className="bg-black/80 backdrop-blur-sm hover:bg-black border border-gray-100 text-gray-300 text-sm px-5 py-2 rounded-full flex items-center gap-2 transition-all cursor-pointer shadow-sm hover:shadow-md"
             >
-              <Star className="w-3 h-3 text-purple-900" />
+              <Star className="w-3 h-3 text-purple-400" aria-hidden="true" />
               {feature}
             </motion.div>
           ))}

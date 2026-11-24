@@ -40,6 +40,56 @@
   }
 }
 
+/* ---------- Lightweight CSS animations (transform/opacity only: run on the compositor, no JS) ---------- */
+@keyframes hero-line-x {
+  0% { transform: translateX(-100%); opacity: 0; }
+  50% { opacity: 0.5; }
+  100% { transform: translateX(100%); opacity: 0; }
+}
+@keyframes hero-line-y {
+  0% { transform: translateY(-50%); opacity: 0; }
+  50% { opacity: 0.5; }
+  100% { transform: translateY(50%); opacity: 0; }
+}
+@keyframes spin { to { transform: rotate(360deg); } }
+@keyframes glow { 0%, 100% { opacity: 0.3; } 50% { opacity: 0.6; } }
+@keyframes sway {
+  0%, 100% { transform: rotate(0) scale(1); }
+  33% { transform: rotate(15deg) scale(1.1); }
+  66% { transform: rotate(-15deg) scale(1); }
+}
+@keyframes drift {
+  0%, 100% { transform: translate(0, 0); }
+  33% { transform: translate(40px, -40px); }
+  66% { transform: translate(-20px, 20px); }
+}
+@keyframes ping-soft { 0% { transform: scale(1); opacity: 0.5; } 70%, 100% { transform: scale(1.35); opacity: 0; } }
+/* Entrance animations deliberately keep opacity at 1 so text is an LCP candidate from first paint. */
+@keyframes slide-in-left { from { transform: translateX(-40px); } to { transform: none; } }
+@keyframes slide-in-up { from { transform: translate(30px, 30px); } to { transform: none; } }
+@keyframes nav-drop { from { transform: translateY(-24px); } to { transform: none; } }
+
+.hero-line-x { animation: hero-line-x linear infinite; will-change: transform; }
+.hero-line-y { animation: hero-line-y linear infinite; will-change: transform; }
+.spin-slow { animation: spin 20s linear infinite; }
+.spin-slow-reverse { animation: spin 15s linear infinite reverse; }
+.hero-glow { animation: glow 3s linear infinite; }
+.float-sway { animation: sway 3s ease-in-out infinite; }
+.drift { animation: drift 18s linear infinite; }
+.ping-soft { animation: ping-soft 2s ease-out infinite; }
+.hero-slide-in { animation: slide-in-left 0.7s ease-out both; }
+.hero-card-in { animation: slide-in-up 0.6s 0.2s ease-out both; }
+.nav-drop { animation: nav-drop 0.5s ease-out both; }
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
 /* Custom scrollbar */
 ::-webkit-scrollbar {
   width: 8px;

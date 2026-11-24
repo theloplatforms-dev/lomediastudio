@@ -2,7 +2,8 @@
 'use client';
 
 import { motion, AnimatePresence } from 'framer-motion';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
+import { whatsappLink as buildWhatsappLink } from '@/lib/site';
 import { MessageCircle, X, Send, Minimize2, Maximize2 } from 'lucide-react';
 
 export default function FloatingWhatsApp() {
@@ -11,28 +12,21 @@ export default function FloatingWhatsApp() {
   const [showTooltip, setShowTooltip] = useState(true);
   const [message, setMessage] = useState('');
   const [isVisible, setIsVisible] = useState(true);
-  const [lastScrollY, setLastScrollY] = useState(0);
+  const lastScrollY = useRef(0);
 
   // WhatsApp number - replace with your actual WhatsApp number (country code + number, no + or spaces)
-  const whatsappNumber = "+1 (514) 219-2987"; // Nigeria format: 2348012345678
-  const whatsappLink = `https://wa.me/${whatsappNumber}`;
+  const whatsappLink = buildWhatsappLink();
 
   // Hide on scroll down, show on scroll up
   useEffect(() => {
-    const controlNavbar = () => {
-      if (typeof window !== 'undefined') {
-        if (window.scrollY > lastScrollY && window.scrollY > 100) {
-          setIsVisible(false);
-        } else {
-          setIsVisible(true);
-        }
-        setLastScrollY(window.scrollY);
-      }
+    const onScroll = () => {
+      const y = window.scrollY;
+      setIsVisible(!(y > lastScrollY.current && y > 100));
+      lastScrollY.current = y;
     };
-
-    window.addEventListener('scroll', controlNavbar);
-    return () => window.removeEventListener('scroll', controlNavbar);
-  }, [lastScrollY]);
+    window.addEventListener('scroll', onScroll, { passive: true });
+    return () => window.removeEventListener('scroll', onScroll);
+  }, []);
 
   // Auto-hide tooltip after 10 seconds
   useEffect(() => {
@@ -99,6 +93,9 @@ export default function FloatingWhatsApp() {
           whileHover={{ scale: 1.1 }}
           whileTap={{ scale: 0.95 }}
           onClick={() => setIsOpen(!isOpen)}
+          type="button"
+          aria-label={isOpen ? 'Close WhatsApp chat' : 'Chat with us on WhatsApp'}
+          aria-expanded={isOpen}
           className={`relative w-14 h-14 rounded-full shadow-2xl flex items-center justify-center transition-all duration-300 ${
             isOpen 
               ? 'bg-gray-900 hover:bg-gray-800' 
@@ -113,18 +110,7 @@ export default function FloatingWhatsApp() {
           
           {/* Pulse Animation */}
           {!isOpen && (
-            <motion.span
-              animate={{
-                scale: [1, 1.2, 1],
-                opacity: [0.5, 0, 0.5],
-              }}
-              transition={{
-                duration: 2,
-                repeat: Infinity,
-                ease: "easeInOut",
-              }}
-              className="absolute inset-0 rounded-full bg-green-500/50"
-            />
+            <span aria-hidden="true" className="ping-soft absolute inset-0 rounded-full bg-green-500/50" />
           )}
         </motion.button>
 
@@ -152,12 +138,16 @@ export default function FloatingWhatsApp() {
                 <div className="flex gap-2">
                   <button
                     onClick={() => setIsMinimized(!isMinimized)}
+                    type="button"
+                    aria-label={isMinimized ? 'Expand chat' : 'Minimize chat'}
                     className="text-white/80 hover:text-white transition-colors"
                   >
                     {isMinimized ? <Maximize2 className="w-4 h-4" /> : <Minimize2 className="w-4 h-4" />}
                   </button>
                   <button
                     onClick={() => setIsOpen(false)}
+                    type="button"
+                    aria-label="Close chat"
                     className="text-white/80 hover:text-white transition-colors"
                   >
                     <X className="w-4 h-4" />
@@ -178,7 +168,7 @@ export default function FloatingWhatsApp() {
                   <div className="mb-4">
                     <div className="bg-gray-100 rounded-2xl rounded-tl-none p-3 max-w-[85%]">
                       <p className="text-sm text-gray-700">
-                        👋 Hi there! Welcome to LomeMediaStudio. How can we help you today?
+                        👋 Hi there! Welcome to LO Media Studio. How can we help you today?
                       </p>
                     </div>
                   </div>
@@ -205,12 +195,15 @@ export default function FloatingWhatsApp() {
                       type="text"
                       value={message}
                       onChange={(e) => setMessage(e.target.value)}
-                      onKeyPress={(e) => e.key === 'Enter' && handleSendMessage()}
+                      onKeyDown={(e) => e.key === 'Enter' && handleSendMessage()}
+                      aria-label="Type your WhatsApp message"
                       placeholder="Type your message..."
                       className="flex-1 px-4 py-2 border border-gray-200 rounded-full text-sm focus:outline-none focus:border-green-500 transition-colors"
                     />
                     <button
                       onClick={handleSendMessage}
+                      type="button"
+                      aria-label="Send message on WhatsApp"
                       className="w-10 h-10 bg-green-500 hover:bg-green-600 rounded-full flex items-center justify-center transition-colors"
                     >
                       <Send className="w-4 h-4 text-white" />

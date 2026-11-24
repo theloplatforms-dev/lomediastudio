@@ -1,7 +1,4 @@
-// components/Footer.tsx
-'use client';
-
-import { motion } from 'framer-motion';
+// Server component: no client JavaScript is shipped for the footer.
 import { 
   ArrowRight, 
   Mail, 
@@ -15,6 +12,7 @@ import {
 } from 'lucide-react';
 import Image from 'next/image'
 import Link from 'next/link';
+import { CONTACT } from '@/lib/site';
 
 export default function Footer() {
   const currentYear = new Date().getFullYear();
@@ -26,10 +24,14 @@ export default function Footer() {
       { name: 'Our Services', href: '/services' },
     ],
     Services: [
-      { name: 'Web Creation', href: '/services' },
-      { name: 'Event Videography', href: '/services' },
-      { name: 'Recording Studio', href: '/services' },
-      { name: 'Branding ....', href: '/services' },
+      { name: 'Video Production', href: '/services/video-production' },
+      { name: 'Photography', href: '/services/photography' },
+      { name: 'Visual Brand Development', href: '/services/visual-brand-development' },
+      { name: 'Digital Marketing', href: '/services/digital-marketing' },
+    ],
+    Resources: [
+      { name: 'Blog', href: '/blog' },
+      { name: 'All Services', href: '/services' },
     ],
     Support: [
       { name: 'Contact Us', href: '/contact' },
@@ -48,26 +50,18 @@ export default function Footer() {
 
   return (
     <footer className="relative bg-gray-900 overflow-hidden">
-      {/* Animated Background */}
-      <div className="absolute inset-0 overflow-hidden pointer-events-none">
-        {[...Array(3)].map((_, i) => (
-          <motion.div
-            key={`footer-orb-${i}`}
-            className="absolute rounded-full bg-purple-900/5 blur-3xl"
+      {/* Background (CSS animation) */}
+      <div className="absolute inset-0 overflow-hidden pointer-events-none" aria-hidden="true">
+        {[0, 1, 2].map((i) => (
+          <div
+            key={`orb-${i}`}
+            className="drift absolute rounded-full bg-purple-900/5 blur-3xl"
             style={{
               width: `${300 + i * 100}px`,
               height: `${300 + i * 100}px`,
               left: `${10 + i * 30}%`,
               top: `${20 + i * 20}%`,
-            }}
-            animate={{
-              x: [0, 30, -20, 0],
-              y: [0, -30, 20, 0],
-            }}
-            transition={{
-              duration: 20 + i * 5,
-              repeat: Infinity,
-              ease: "linear",
+              animationDuration: `${20 + i * 5}s`,
             }}
           />
         ))}
@@ -76,29 +70,23 @@ export default function Footer() {
       {/* Main Footer Content */}
       <div className="relative z-10 max-w-7xl mx-auto px-6 lg:px-8 pt-16 pb-8">
         {/* Top Section */}
-        <div className="grid grid-cols-1 lg:grid-cols-4 gap-8 mb-12">
+        <div className="grid grid-cols-2 lg:grid-cols-5 gap-8 mb-12">
           {/* Brand Column */}
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5 }}
-            viewport={{ once: true }}
-            className="lg:col-span-1"
+          <div
+            className="col-span-2 lg:col-span-1"
           >
-            <Link href="/">
-              <motion.h2 
-                whileHover={{ scale: 1.05 }}
-                className="text-2xl font-bold bg-gradient-to-r from-purple-900 to-red-600 bg-clip-text text-transparent mb-4"
-              >
+            <Link href="/" aria-label="LO Media Studio home">
+              <span className="flex items-center text-2xl font-bold bg-gradient-to-r from-purple-500 to-red-500 bg-clip-text text-transparent mb-4">
                 <Image
-                    src="/logo.png"
-                    alt="LoMediaStudio"
-                    width={82}
-                    height={82}
-                    className="inline-block mr-2"
-                  />
+                  src="/logo.png"
+                  alt=""
+                  width={82}
+                  height={82}
+                  sizes="82px"
+                  className="inline-block mr-2"
+                />
                 LoMediaStudio
-              </motion.h2>
+              </span>
             </Link>
             <p className="text-gray-400 text-sm mb-6 leading-relaxed">
               Creating captivating media experiences that transform brands and inspire audiences worldwide.
@@ -107,59 +95,47 @@ export default function Footer() {
             {/* Contact Info */}
             <div className="space-y-3">
               <div className="flex items-center gap-3 text-gray-400 text-sm">
-                <Mail className="w-4 h-4 text-purple-900" />
-                <span>layoobidikepublications@gmail.com</span>
+                <Mail className="w-4 h-4 text-purple-400" aria-hidden="true" />
+                <a href={`mailto:${CONTACT.email}`} className="hover:text-white break-all">{CONTACT.email}</a>
               </div>
               <div className="flex items-center gap-3 text-gray-400 text-sm">
-                <Phone className="w-4 h-4 text-purple-900" />
-                <span>+1 (555) 123-4567</span>
+                <Phone className="w-4 h-4 text-purple-400" aria-hidden="true" />
+                <a href={`tel:${CONTACT.phoneE164}`} className="hover:text-white">{CONTACT.phoneDisplay}</a>
               </div>
               <div className="flex items-center gap-3 text-gray-400 text-sm">
-                <MapPin className="w-4 h-4 text-purple-900" />
-                <span>1551 Lycee Place
-Ottawa, ON K1G4B5
-Canada</span>
+                <MapPin className="w-4 h-4 text-purple-400" aria-hidden="true" />
+                <span>{CONTACT.street}, {CONTACT.city}, {CONTACT.region} {CONTACT.postalCode}, {CONTACT.countryName}</span>
               </div>
             </div>
-          </motion.div>
+          </div>
 
           {/* Links Columns */}
           {Object.entries(footerLinks).map(([category, links], idx) => (
-            <motion.div
+            <div
               key={category}
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.5, delay: idx * 0.1 }}
-              viewport={{ once: true }}
               className="lg:col-span-1"
             >
               <h3 className="text-white font-semibold mb-4">{category}</h3>
               <ul className="space-y-3">
                 {links.map((link, linkIdx) => (
-                  <motion.li
+                  <li
                     key={linkIdx}
-                    whileHover={{ x: 5 }}
-                    transition={{ duration: 0.2 }}
                   >
                     <Link
                       href={link.href}
-                      className="text-gray-400 hover:text-purple-900 text-sm transition-colors duration-300"
+                      className="inline-block text-gray-400 hover:text-white hover:translate-x-1 text-sm transition-all duration-300"
                     >
                       {link.name}
                     </Link>
-                  </motion.li>
+                  </li>
                 ))}
               </ul>
-            </motion.div>
+            </div>
           ))}
         </div>
 
         {/* Newsletter Section */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5, delay: 0.3 }}
-          viewport={{ once: true }}
+        <div
           className="border-t border-gray-800 pt-8 mb-8"
         >
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6 items-center">
@@ -168,27 +144,29 @@ Canada</span>
               <p className="text-gray-400 text-sm">Get the latest updates on projects and industry insights.</p>
             </div>
             <div className="flex gap-3">
+              <label htmlFor="footer-newsletter" className="sr-only">Email address</label>
               <input
+                id="footer-newsletter"
                 type="email"
+                autoComplete="email"
                 placeholder="Enter your email"
                 className="flex-1 px-4 py-2 bg-gray-800 border border-gray-700 rounded-lg text-white text-sm focus:outline-none focus:border-purple-900 transition-colors"
               />
-              <motion.button
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.95 }}
-                className="px-4 py-2 bg-purple-900 hover:bg-red-600 text-white rounded-lg text-sm font-medium flex items-center gap-2 transition-colors"
+              <button
+                type="button"
+                className="px-4 py-2 bg-purple-900 hover:bg-red-600 hover:scale-105 text-white rounded-lg text-sm font-medium flex items-center gap-2 transition-colors"
               >
                 Subscribe
-                <ArrowRight className="w-4 h-4" />
-              </motion.button>
+                <ArrowRight className="w-4 h-4" aria-hidden="true" />
+              </button>
             </div>
           </div>
-        </motion.div>
+        </div>
 
         {/* Bottom Section */}
         <div className="border-t border-gray-800 pt-8 flex flex-col md:flex-row justify-between items-center gap-4">
-          <p className="text-gray-500 text-sm">
-            © {currentYear} LomeMediaStudio. All rights reserved.
+          <p className="text-gray-400 text-sm">
+            © {currentYear} LO Media Studio. All rights reserved.
           </p>
           
           {/* Social Links */}
@@ -197,8 +175,6 @@ Canada</span>
               <motion.a
                 key={idx}
                 href={social.href}
-                whileHover={{ scale: 1.1, y: -2 }}
-                whileTap={{ scale: 0.95 }}
                 className="w-9 h-9 bg-gray-800 hover:bg-purple-900 rounded-full flex items-center justify-center text-gray-400 hover:text-white transition-all duration-300"
                 aria-label={social.label}
               >

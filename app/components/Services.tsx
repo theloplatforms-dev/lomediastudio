@@ -2,6 +2,7 @@
 
 import { motion, useScroll, useTransform, useSpring } from "framer-motion";
 import { useRef } from "react";
+import Link from "next/link";
 import { 
   PenTool,
   TrendingUp,
@@ -120,27 +121,18 @@ export default function Services() {
         y: sectionY,
       }}
     >
-      {/* Animated Background Elements */}
-      <div className="absolute inset-0 overflow-hidden pointer-events-none">
-        {[...Array(6)].map((_, i) => (
-          <motion.div
-            key={`bg-${i}`}
-            className="absolute rounded-full bg-gradient-to-r from-red-500/5 to-purple-500/5 blur-3xl"
+      {/* Background elements (CSS animation, deterministic positions) */}
+      <div className="absolute inset-0 overflow-hidden pointer-events-none" aria-hidden="true">
+        {[0, 1, 2, 3].map((i) => (
+          <div
+            key={`orb-${i}`}
+            className="drift absolute rounded-full bg-gradient-to-r from-red-500/5 to-purple-500/5 blur-3xl"
             style={{
               width: `${300 + i * 50}px`,
               height: `${300 + i * 50}px`,
-              left: `${Math.random() * 100}%`,
-              top: `${Math.random() * 100}%`,
-            }}
-            animate={{
-              x: [0, 60, -40, 0],
-              y: [0, -50, 30, 0],
-              scale: [1, 1.1, 0.9, 1],
-            }}
-            transition={{
-              duration: 20 + i * 4,
-              repeat: Infinity,
-              ease: "linear",
+              left: `${5 + i * 30}%`,
+              top: `${10 + i * 25}%`,
+              animationDuration: `${20 + i * 4}s`,
             }}
           />
         ))}
@@ -210,22 +202,6 @@ export default function Services() {
               className="group"
             >
               <div className="relative bg-white/80 backdrop-blur-lg rounded-2xl p-6 shadow-lg border border-gray-200/50 transition-all duration-300 group-hover:shadow-2xl group-hover:bg-white/90 h-full">
-                {/* Animated gradient background on hover */}
-                <motion.div
-                  className="absolute inset-0 rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none"
-                  animate={{
-                    background: [
-                      `radial-gradient(circle at 20% 50%, ${service.color.replace('text', 'bg').replace('-500', '-500/10')} 0%, transparent 70%)`,
-                      `radial-gradient(circle at 80% 50%, ${service.color.replace('text', 'bg').replace('-500', '-500/10')} 0%, transparent 70%)`,
-                      `radial-gradient(circle at 20% 50%, ${service.color.replace('text', 'bg').replace('-500', '-500/10')} 0%, transparent 70%)`,
-                    ],
-                  }}
-                  transition={{
-                    duration: 3,
-                    repeat: Infinity,
-                  }}
-                />
-                
                 <div className="relative z-10">
                   {/* Icon Container with Swing Animation */}
                   <motion.div
@@ -272,15 +248,12 @@ export default function Services() {
           viewport={{ once: true }}
           className="text-center mt-12"
         >
-          <a href="/services">
-            <motion.button
-              whileHover={{ scale: 1.05 }}
-              whileTap={{ scale: 0.95 }}
-              className="bg-red-600 hover:bg-red-700 text-white px-8 py-3 rounded-full font-semibold shadow-lg transition-all duration-300"
-            >
-              View All Services
-            </motion.button>
-          </a>
+          <Link
+            href="/services"
+            className="inline-block bg-red-600 hover:bg-red-700 hover:scale-105 text-white px-8 py-3 rounded-full font-semibold shadow-lg transition-all duration-300"
+          >
+            View All Services
+          </Link>
         </motion.div>
       </div>
     </motion.section>

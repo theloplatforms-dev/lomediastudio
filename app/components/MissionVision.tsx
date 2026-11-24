@@ -1,6 +1,6 @@
 'use client';
 
-import { motion, useScroll, useTransform, useSpring } from 'framer-motion';
+import { motion, useScroll, useTransform, useSpring, useMotionValue } from 'framer-motion';
 import { useRef, useEffect, useState } from 'react';
 import { Target, Eye, Zap, Shield, Heart, Sparkles, Award, Users, Globe } from 'lucide-react';
 
@@ -8,7 +8,9 @@ export default function MissionVision() {
   const sectionRef = useRef<HTMLElement>(null);
   const missionRef = useRef<HTMLDivElement>(null);
   const visionRef = useRef<HTMLDivElement>(null);
-  const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
+  // Motion values update the cursor without re-rendering the whole section on every mouse move.
+  const cursorX = useMotionValue(-100);
+  const cursorY = useMotionValue(-100);
   const [hoveredCard, setHoveredCard] = useState<string | null>(null);
   
   const { scrollYProgress } = useScroll({
@@ -40,12 +42,14 @@ export default function MissionVision() {
 
   // Mouse move effect for the moving dot
   useEffect(() => {
+    if (!window.matchMedia('(min-width: 1024px) and (pointer: fine)').matches) return;
     const handleMouseMove = (e: MouseEvent) => {
-      setMousePosition({ x: e.clientX, y: e.clientY });
+      cursorX.set(e.clientX - 24);
+      cursorY.set(e.clientY - 24);
     };
-    window.addEventListener('mousemove', handleMouseMove);
+    window.addEventListener('mousemove', handleMouseMove, { passive: true });
     return () => window.removeEventListener('mousemove', handleMouseMove);
-  }, []);
+  }, [cursorX, cursorY]);
 
   // Key focus areas for Mission
   const missionFocusAreas = [
@@ -73,108 +77,31 @@ export default function MissionVision() {
         y: sectionY,
       }}
     >
-      {/* Small Moving Dot with Border */}
+      {/* Small moving dot that follows the cursor (desktop only) */}
       <motion.div
-        className="fixed w-12 h-12 pointer-events-none z-50 hidden lg:block"
-        style={{
-          left: mousePosition.x - 24,
-          top: mousePosition.y - 24,
-        }}
-        animate={{
-          scale: [1, 1.1, 1],
-        }}
-        transition={{
-          duration: 2,
-          repeat: Infinity,
-          ease: "linear",
-        }}
+        aria-hidden="true"
+        className="fixed top-0 left-0 w-12 h-12 pointer-events-none z-50 hidden lg:block"
+        style={{ x: cursorX, y: cursorY }}
       >
         <div className="relative w-full h-full">
-          <motion.div
-            className="absolute inset-0 border border-red-500/40 rounded-full"
-            animate={{
-              scale: [1, 1.08, 1],
-              opacity: [0.4, 0.7, 0.4],
-            }}
-            transition={{
-              duration: 2,
-              repeat: Infinity,
-            }}
-          />
-          
-          <motion.div
-            className="absolute inset-1 border border-purple-400/60 rounded-full"
-            animate={{
-              rotate: 360,
-            }}
-            transition={{
-              duration: 5,
-              repeat: Infinity,
-              ease: "linear",
-            }}
-          />
-          
-          <motion.div
-            className="absolute inset-0 m-auto w-1.5 h-1.5 bg-red-500 rounded-full"
-            animate={{
-              scale: [1, 2, 1],
-              boxShadow: [
-                "0 0 0 0 rgba(239, 68, 68, 0.4)",
-                "0 0 0 6px rgba(239, 68, 68, 0)",
-                "0 0 0 0 rgba(239, 68, 68, 0)",
-              ],
-            }}
-            transition={{
-              duration: 1.5,
-              repeat: Infinity,
-              ease: "easeInOut",
-            }}
-          />
-          
-          {[...Array(6)].map((_, i) => (
-            <motion.div
-              key={i}
-              className="absolute w-0.5 h-0.5 bg-purple-400 rounded-full"
-              style={{
-                left: '50%',
-                top: '50%',
-              }}
-              animate={{
-                x: Math.cos(i * 60 * Math.PI / 180) * 18,
-                y: Math.sin(i * 60 * Math.PI / 180) * 18,
-                scale: [0, 1, 0],
-                opacity: [0, 0.5, 0],
-              }}
-              transition={{
-                duration: 2,
-                repeat: Infinity,
-                delay: i * 0.2,
-              }}
-            />
-          ))}
+          <div className="absolute inset-0 border border-red-500/50 rounded-full" />
+          <div className="spin-slow absolute inset-1 border border-purple-400/60 rounded-full" />
+          <div className="absolute inset-0 m-auto w-1.5 h-1.5 bg-red-500 rounded-full" />
         </div>
       </motion.div>
 
-      {/* Subtle Background Elements */}
-      <div className="absolute inset-0 overflow-hidden pointer-events-none">
-        {[...Array(3)].map((_, i) => (
-          <motion.div
+      {/* Subtle background elements (CSS animation, no JS) */}
+      <div className="absolute inset-0 overflow-hidden pointer-events-none" aria-hidden="true">
+        {[0, 1, 2].map((i) => (
+          <div
             key={`orb-${i}`}
-            className="absolute rounded-full bg-red-500/5 blur-2xl"
+            className="drift absolute rounded-full bg-red-500/5 blur-2xl"
             style={{
               width: `${150 + i * 40}px`,
               height: `${150 + i * 40}px`,
               left: `${20 + i * 30}%`,
               top: `${30 + i * 20}%`,
-            }}
-            animate={{
-              x: [0, 40, -20, 0],
-              y: [0, -40, 20, 0],
-            }}
-            transition={{
-              duration: 12 + i * 3,
-              repeat: Infinity,
-              ease: "linear",
+              animationDuration: `${12 + i * 3}s`,
             }}
           />
         ))}

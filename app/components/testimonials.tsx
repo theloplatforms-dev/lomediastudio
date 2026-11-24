@@ -1,8 +1,8 @@
-// app/testimonials/page.tsx
 'use client';
 
 import { motion, useScroll, useTransform, useSpring } from 'framer-motion';
 import { useRef } from 'react';
+import Image from 'next/image';
 import { Star, ChevronLeft, ChevronRight } from 'lucide-react';
 
 export default function Testimonials() {
@@ -93,26 +93,18 @@ export default function Testimonials() {
            y: sectionY,
          }}
        >
-      {/* Background Elements */}
-      <div className="absolute inset-0 overflow-hidden pointer-events-none">
-        {[...Array(3)].map((_, i) => (
-          <motion.div
+      {/* Background elements (CSS animation) */}
+      <div className="absolute inset-0 overflow-hidden pointer-events-none" aria-hidden="true">
+        {[0, 1, 2].map((i) => (
+          <div
             key={`orb-${i}`}
-            className="absolute rounded-full bg-purple-900/5 blur-3xl"
+            className="drift absolute rounded-full bg-purple-900/5 blur-3xl"
             style={{
               width: `${200 + i * 80}px`,
               height: `${200 + i * 80}px`,
               left: `${20 + i * 30}%`,
               top: `${30 + i * 20}%`,
-            }}
-            animate={{
-              x: [0, 50, -30, 0],
-              y: [0, -40, 20, 0],
-            }}
-            transition={{
-              duration: 15 + i * 4,
-              repeat: Infinity,
-              ease: "linear",
+              animationDuration: `${15 + i * 4}s`,
             }}
           />
         ))}
@@ -161,11 +153,13 @@ export default function Testimonials() {
                 >
                   {/* User Info */}
                   <div className="flex items-center gap-4 mb-4">
-                    <motion.img 
-                      src={testimonial.image} 
-                      alt={testimonial.name}
-                      whileHover={{ scale: 1.05 }}
-                      className="w-12 h-12 rounded-full object-cover ring-2 ring-purple-900/30" 
+                    <Image
+                      src={testimonial.image}
+                      alt=""
+                      width={48}
+                      height={48}
+                      sizes="48px"
+                      className="w-12 h-12 rounded-full object-cover ring-2 ring-purple-900/30"
                     />
                     <div>
                       <p className="font-semibold text-gray-900">{testimonial.name}</p>
@@ -202,7 +196,7 @@ export default function Testimonials() {
           </div>
 
           {/* Second Row - Varying Tops (different top margins), Aligned Bottoms (items-end) */}
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mt-[-75] items-end">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 md:-mt-[75px] items-end">
             {secondRowCards.map((testimonial, idx) => (
               <motion.div
                 key={`second-${idx}`}
@@ -224,11 +218,13 @@ export default function Testimonials() {
                 >
                   {/* User Info */}
                   <div className="flex items-center gap-4 mb-4">
-                    <motion.img 
-                      src={testimonial.image} 
-                      alt={testimonial.name}
-                      whileHover={{ scale: 1.05 }}
-                      className="w-12 h-12 rounded-full object-cover ring-2 ring-purple-900/30" 
+                    <Image
+                      src={testimonial.image}
+                      alt=""
+                      width={48}
+                      height={48}
+                      sizes="48px"
+                      className="w-12 h-12 rounded-full object-cover ring-2 ring-purple-900/30"
                     />
                     <div>
                       <p className="font-semibold text-gray-900">{testimonial.name}</p>
@@ -276,6 +272,8 @@ export default function Testimonials() {
           <motion.button
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
+            type="button"
+            aria-label="Previous testimonials"
             className="bg-white/80 backdrop-blur-lg border border-gray-200/50 text-gray-700 p-3 rounded-full hover:bg-white hover:shadow-lg transition-all"
           >
             <ChevronLeft className="w-5 h-5" />
@@ -284,6 +282,8 @@ export default function Testimonials() {
           <motion.button
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
+            type="button"
+            aria-label="Next testimonials"
             className="bg-white/80 backdrop-blur-lg border border-gray-200/50 text-gray-700 p-3 rounded-full hover:bg-white hover:shadow-lg transition-all"
           >
             <ChevronRight className="w-5 h-5" />
@@ -310,7 +310,7 @@ export default function Testimonials() {
               className="text-center"
             >
               <div className="text-2xl font-bold text-purple-900">{stat.value}</div>
-              <div className="text-xs text-gray-500">{stat.label}</div>
+              <div className="text-xs text-gray-600">{stat.label}</div>
             </motion.div>
           ))}
         </motion.div>
