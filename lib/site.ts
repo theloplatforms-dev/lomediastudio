@@ -1,15 +1,18 @@
 // Single source of truth for business details used in metadata, structured data and contact links.
 
 export const SITE_URL = "https://www.lomediastudio.com";
-export const SITE_NAME = "LO Media Studio";
-export const SITE_TAGLINE = "Creative Media Studio in Ottawa";
+export const SITE_NAME = "LoMediaStudio";
+export const SITE_TAGLINE = "Video Production, Photography & Digital Marketing in Ottawa";
 export const SITE_DESCRIPTION =
-  "LO Media Studio is an Ottawa creative media studio offering video production, photography, brand storytelling, visual brand development and digital marketing that help brands grow.";
+  "LoMediaStudio is a media production agency in Ottawa, Canada. We create video production, photography, digital marketing, branding and content that turns your vision into growth.";
 
 export const CONTACT = {
   email: "layoobidikepublications@gmail.com",
-  phoneDisplay: "+1 (514) 219-2987",
-  phoneE164: "+15142192987",
+  // Call line
+  phoneDisplay: "+1 (905) 922-4471",
+  phoneE164: "+19059224471",
+  // WhatsApp line
+  whatsappDisplay: "+1 (514) 219-2987",
   whatsapp: "15142192987",
   street: "1551 Lycee Place",
   city: "Ottawa",

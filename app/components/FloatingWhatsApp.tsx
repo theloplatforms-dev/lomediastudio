@@ -61,7 +61,7 @@ export default function FloatingWhatsApp() {
   return (
     <>
       {/* Floating Button */}
-      <motion.div
+      <motion.div suppressHydrationWarning
         initial={{ scale: 0, opacity: 0 }}
         animate={{ 
           scale: isVisible ? 1 : 0,
@@ -74,7 +74,7 @@ export default function FloatingWhatsApp() {
         {/* Tooltip */}
         <AnimatePresence>
           {showTooltip && !isOpen && (
-            <motion.div
+            <motion.div suppressHydrationWarning
               initial={{ opacity: 0, x: 20, scale: 0.8 }}
               animate={{ opacity: 1, x: 0, scale: 1 }}
               exit={{ opacity: 0, x: 20, scale: 0.8 }}
@@ -89,7 +89,7 @@ export default function FloatingWhatsApp() {
         </AnimatePresence>
 
         {/* Main Button */}
-        <motion.button
+        <motion.button suppressHydrationWarning
           whileHover={{ scale: 1.1 }}
           whileTap={{ scale: 0.95 }}
           onClick={() => setIsOpen(!isOpen)}
@@ -117,7 +117,7 @@ export default function FloatingWhatsApp() {
         {/* Chat Window */}
         <AnimatePresence>
           {isOpen && (
-            <motion.div
+            <motion.div suppressHydrationWarning
               initial={{ opacity: 0, y: 20, scale: 0.9 }}
               animate={{ opacity: 1, y: 0, scale: 1 }}
               exit={{ opacity: 0, y: 20, scale: 0.9 }}

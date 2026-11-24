@@ -24,9 +24,10 @@ export default function Footer() {
       { name: 'Our Services', href: '/services' },
     ],
     Services: [
-      { name: 'Video Production', href: '/services/video-production' },
+      { name: 'Media Content Creation', href: '/services/media-content-creation' },
+      { name: 'Event Videography', href: '/services/video-production' },
+      { name: 'Branding', href: '/services/visual-brand-development' },
       { name: 'Photography', href: '/services/photography' },
-      { name: 'Visual Brand Development', href: '/services/visual-brand-development' },
       { name: 'Digital Marketing', href: '/services/digital-marketing' },
     ],
     Resources: [
@@ -96,7 +97,7 @@ export default function Footer() {
             <div className="space-y-3">
               <div className="flex items-center gap-3 text-gray-400 text-sm">
                 <Mail className="w-4 h-4 text-purple-400" aria-hidden="true" />
-                <a href={`mailto:${CONTACT.email}`} className="hover:text-white break-all">{CONTACT.email}</a>
+                <a href="mailto:layo@lomediahouse.com" className="hover:text-white break-all">layo@lomediahouse.com</a>
               </div>
               <div className="flex items-center gap-3 text-gray-400 text-sm">
                 <Phone className="w-4 h-4 text-purple-400" aria-hidden="true" />

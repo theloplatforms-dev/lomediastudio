@@ -4,15 +4,26 @@ import "./globals.css";
 import Footer from "./components/Footer";
 import Navbar from "./components/Navbar";
 import LazyWhatsApp from "./components/LazyWhatsApp";
-import { CONTACT, DEFAULT_OG_IMAGE, SITE_DESCRIPTION, SITE_NAME, SITE_URL } from "@/lib/site";
+import { CONTACT, DEFAULT_OG_IMAGE, SITE_DESCRIPTION, SITE_NAME, SITE_TAGLINE, SITE_URL } from "@/lib/site";
 
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),
   title: {
-    default: `${SITE_NAME} | Video Production, Photography & Branding in Ottawa`,
+    default: `${SITE_NAME} | ${SITE_TAGLINE}`,
     template: `%s | ${SITE_NAME}`,
   },
   description: SITE_DESCRIPTION,
+  keywords: [
+    "media production Ottawa",
+    "video production Ottawa",
+    "photography Ottawa",
+    "digital marketing Ottawa",
+    "content creation",
+    "brand development",
+    "email marketing",
+    "creative direction",
+    "LoMediaStudio",
+  ],
   applicationName: SITE_NAME,
   authors: [{ name: SITE_NAME, url: SITE_URL }],
   creator: SITE_NAME,
@@ -23,20 +34,35 @@ export const metadata: Metadata = {
     locale: "en_CA",
     url: "/",
     siteName: SITE_NAME,
-    title: `${SITE_NAME} | Creative Media Studio in Ottawa`,
+    title: `${SITE_NAME} | ${SITE_TAGLINE}`,
     description: SITE_DESCRIPTION,
     images: [{ url: DEFAULT_OG_IMAGE, width: 1200, height: 675, alt: `${SITE_NAME} creative workspace` }],
   },
   twitter: {
     card: "summary_large_image",
-    title: `${SITE_NAME} | Creative Media Studio in Ottawa`,
+    title: `${SITE_NAME} | ${SITE_TAGLINE}`,
     description: SITE_DESCRIPTION,
     images: [DEFAULT_OG_IMAGE],
   },
   robots: {
     index: true,
     follow: true,
-    googleBot: { index: true, follow: true, "max-image-preview": "large", "max-snippet": -1 },
+    googleBot: {
+      index: true,
+      follow: true,
+      "max-image-preview": "large",
+      "max-snippet": -1,
+      "max-video-preview": -1,
+    },
+  },
+  icons: {
+    icon: "/favicon.ico",
+    apple: "/logo.png",
+  },
+  appleWebApp: {
+    capable: true,
+    title: SITE_NAME,
+    statusBarStyle: "default",
   },
   formatDetection: { telephone: false },
 };
@@ -77,6 +103,22 @@ const organizationJsonLd = {
     "Creative direction",
     "Media content creation",
   ],
+  contactPoint: {
+    "@type": "ContactPoint",
+    telephone: CONTACT.phoneE164,
+    contactType: "sales",
+    availableLanguage: "English",
+  },
+};
+
+const websiteJsonLd = {
+  "@context": "https://schema.org",
+  "@type": "WebSite",
+  "@id": `${SITE_URL}/#website`,
+  name: SITE_NAME,
+  url: SITE_URL,
+  inLanguage: "en-CA",
+  publisher: { "@id": `${SITE_URL}/#organization` },
 };
 
 export default function RootLayout({
@@ -104,6 +146,10 @@ export default function RootLayout({
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(organizationJsonLd) }}
+        />
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(websiteJsonLd) }}
         />
       </body>
     </html>
